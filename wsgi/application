@@ -9,4 +9,11 @@ from distutils.sysconfig import get_python_lib
 os.environ['PYTHON_EGG_CACHE'] = get_python_lib()
 
 import django.core.wsgi
+
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except ImportError:
+    pass
+
 application = django.core.wsgi.get_wsgi_application()

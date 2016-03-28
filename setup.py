@@ -10,7 +10,8 @@ setup(
     author_email='jonathan@jonathananderson.se',
     url='https://github.com/andersonjonathan/CarinsCup',
     install_requires=[
-        'Django==1.8.5'
+        'Django==1.8.5',
+        'PyMySQL'
     ],
     dependency_links=[
         'https://pypi.python.org/simple/django/'
