@@ -3,6 +3,11 @@ import os
 import sys
 
 if __name__ == "__main__":
+    try:
+        import pymysql
+        pymysql.install_as_MySQLdb()
+    except ImportError:
+        pass
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "base_app.settings")
 
