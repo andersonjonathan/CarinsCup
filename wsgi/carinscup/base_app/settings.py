@@ -1,5 +1,5 @@
 """
-Django settings for myproject project.
+Django settings for Carins cup project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.8/topics/settings/
@@ -16,6 +16,8 @@ WSGI_DIR = os.path.dirname(BASE_DIR)
 REPO_DIR = os.path.dirname(WSGI_DIR)
 DATA_DIR = os.environ.get('OPENSHIFT_DATA_DIR', BASE_DIR)
 
+ON_PASS = 'OPENSHIFT_REPO_DIR' in os.environ
+
 import sys
 sys.path.append(os.path.join(REPO_DIR, 'libs'))
 import secrets
@@ -28,7 +30,10 @@ SECRETS = secrets.getter(os.path.join(DATA_DIR, 'secrets.json'))
 SECRET_KEY = SECRETS['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG') == 'True'
+if ON_PASS:
+    DEBUG = False
+else:
+    DEBUG = True
 
 from socket import gethostname
 ALLOWED_HOSTS = [
@@ -60,8 +65,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-# GETTING-STARTED: change 'myproject' to your project name:
-ROOT_URLCONF = 'myproject.urls'
+ROOT_URLCONF = 'base_app.urls'
 
 TEMPLATES = [
     {
@@ -79,19 +83,41 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'myproject.wsgi.application'
+WSGI_APPLICATION = 'base_app.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        # GETTING-STARTED: change 'db.sqlite3' to your sqlite3 database:
-        'NAME': os.path.join(DATA_DIR, 'db.sqlite3'),
+if ON_PASS:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['OPENSHIFT_APP_NAME'],
+            'USER': os.environ['OPENSHIFT_MYSQL_DB_USERNAME'],
+            'PASSWORD': os.environ['OPENSHIFT_MYSQL_DB_PASSWORD'],
+            'HOST': os.environ['OPENSHIFT_MYSQL_DB_HOST'],
+            'PORT': os.environ['OPENSHIFT_MYSQL_DB_PORT']
+        }
     }
-}
+else:
+    from utils.helpers import get_mysql_credentials
+
+    module_dir = os.path.dirname(__file__)  # get current directory
+    file_path = os.path.join(module_dir, 'mysql_credentials')
+
+    mysql = get_mysql_credentials(file_path)  # Local db credentials.
+
+    DATABASES = {
+        'default': {
+             'ENGINE': 'django.db.backends.mysql',
+             'NAME': 'django_carinscup',
+             'USER': mysql["user"],
+             'PASSWORD': mysql["password"],
+             'HOST': mysql["host"],
+             'PORT': mysql["port"],
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

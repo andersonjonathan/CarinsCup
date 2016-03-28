@@ -3,21 +3,14 @@
 from setuptools import setup
 
 setup(
-    # GETTING-STARTED: set your app name:
-    name='YourAppName',
-    # GETTING-STARTED: set your app version:
-    version='1.0',
-    # GETTING-STARTED: set your app description:
-    description='OpenShift App',
-    # GETTING-STARTED: set author name (your name):
-    author='Your Name',
-    # GETTING-STARTED: set author email (your email):
-    author_email='example@example.com',
-    # GETTING-STARTED: set author url (your url):
-    url='http://www.python.org/sigs/distutils-sig/',
-    # GETTING-STARTED: define required django version:
+    name='CarinsCup',
+    version='0.1',
+    description='Carins Cup, the most prestigious orienteering cup',
+    author='Jonathan Anderson',
+    author_email='jonathan@jonathananderson.se',
+    url='https://github.com/andersonjonathan/CarinsCup',
     install_requires=[
-        'Django==1.8.4'
+        'Django==1.8.5'
     ],
     dependency_links=[
         'https://pypi.python.org/simple/django/'
