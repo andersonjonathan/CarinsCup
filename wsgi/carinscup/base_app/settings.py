@@ -17,6 +17,9 @@ REPO_DIR = os.path.dirname(WSGI_DIR)
 DATA_DIR = os.environ.get('OPENSHIFT_DATA_DIR', BASE_DIR)
 
 ON_PASS = 'OPENSHIFT_REPO_DIR' in os.environ
+API_KEY = str(os.environ.get('EVENTOR_API'))
+ORGANISATION_ID = 646
+
 
 import sys
 sys.path.append(os.path.join(REPO_DIR, 'libs'))

@@ -1,3 +1,4 @@
+/deploy.sh
 *.py[co]
 *.sw[po]
 *.bak

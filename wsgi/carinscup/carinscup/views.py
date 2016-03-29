@@ -1,10 +1,22 @@
-import os
-from django.shortcuts import render
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404
 from eventor_toolkit import Eventor
-API_KEY = str(os.environ.get('EVENTOR_API'))
+from .models import Competitor
 
 
 def index(request):
-    e = Eventor(API_KEY)
-    return render(request, 'carinscup/index.html', {"organisation": dict(e.organisation_from_api_key()['Organisation'])})
 
+    members = "Hej"
+    #e = Eventor(settings.API_KEY)
+    #members = e.members_in_organisation(settings.ORGANISATION_ID)
+
+    return render(request, 'carinscup/index.html', {"organisation": members})
+
+
+def competitors(request):
+    return render(request, 'carinscup/competitors.html', {"users": Competitor.objects.all()})
+
+
+def competitor(request, pk):
+    user = get_object_or_404(Competitor, pk=pk)
+    return render(request, 'carinscup/competitor.html', {"user": user})

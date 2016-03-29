@@ -1,0 +1,9 @@
+{% extends 'master.html' %}
+{% block body %}
+    <h1>{{ user }}</h1>
+    competitor_id: {{ user.competitor_id }}<br>
+    given_name: {{ user.given_name }}<br>
+    family_name: {{ user.family_name }}<br>
+    sex: {{ user.sex }}<br>
+    birth_date: {{ user.birth_date }}<br>
+{% endblock %}
