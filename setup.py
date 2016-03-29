@@ -11,9 +11,10 @@ setup(
     url='https://github.com/andersonjonathan/CarinsCup',
     install_requires=[
         'Django==1.8.5',
-        'PyMySQL'
+        'PyMySQL',
+        'Eventor-toolkit>=1.0.2',
     ],
     dependency_links=[
-        'https://pypi.python.org/simple/django/'
+        'https://github.com/andersonjonathan/Eventor-toolkit/tarball/master#egg=Eventor-toolkit-1.0.2',
     ],
 )
