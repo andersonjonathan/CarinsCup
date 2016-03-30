@@ -20,3 +20,15 @@ class CompetitorsManager(models.Manager):
                     'family_name': family_name,
                     'sex': sex,
                     'birth_date': birth_date})
+
+
+class OrganisationManager(models.Manager):
+    def update_from_eventor(self):
+        e = Eventor(settings.API_KEY)
+        organisations = e.organisations()
+        for c in organisations:
+            organisation_id = c['OrganisationId']
+            name = c['ShortName']['#text']
+            self.update_or_create(
+                organisation_id=organisation_id,
+                defaults={'name': name})
