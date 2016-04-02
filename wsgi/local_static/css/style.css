@@ -23,3 +23,10 @@
 .icon-size{
     font-size: 1.2em
 }
+.spacer {
+    height: 1.7em;
+}
+
+td, th {
+    padding: 3px 5px;
+}

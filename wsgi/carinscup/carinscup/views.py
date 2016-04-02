@@ -46,3 +46,18 @@ def events(request):
 def event(request, pk):
     tmp = get_object_or_404(Event, pk=pk)
     return render(request, 'carinscup/event.html', {"event": tmp})
+
+
+def organisation(request, pk):
+    tmp = get_object_or_404(Organisation, pk=pk)
+    paginator = Paginator(tmp.event_set.all(), 20)
+
+    page = request.GET.get('page')
+
+    try:
+        content = paginator.page(page)
+    except PageNotAnInteger:
+        content = paginator.page(1)
+    except EmptyPage:
+        content = paginator.page(paginator.num_pages)
+    return render(request, 'carinscup/organisation.html', {"organisation": tmp, 'events': content})

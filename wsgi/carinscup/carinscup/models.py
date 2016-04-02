@@ -1,4 +1,7 @@
+import collections
 from django.db import models
+from django.db.models import Count
+
 from .managers import CompetitorsManager, OrganisationManager
 from django.utils import timezone
 from django.core.urlresolvers import reverse
@@ -91,6 +94,12 @@ class Event(models.Model):
         res = Result.objects.none()
         for r in self.race_set.all():
             res |= r.result_set.all()
+        return res.values_list('competitor').distinct()
+
+    def results(self):
+        res = Result.objects.none()
+        for r in self.race_set.all():
+            res |= r.result_set.all()
         return res.distinct()
 
     def event_form_hr(self):
@@ -117,7 +126,6 @@ class Event(models.Model):
         return tmp
 
 
-
 class Race(models.Model):
     event = models.ForeignKey(Event)
     event_race_id = models.CharField(verbose_name="event race id", max_length=255)
@@ -136,6 +144,42 @@ class Race(models.Model):
             return self.name
         return str(self.event)
 
+    def light_condition_hr(self):
+        mapping = {'Day': 'dag',
+                   'Night': 'natt'}
+        try:
+            tmp = mapping[self.light_condition]
+        except:
+            tmp = self.light_condition
+        return tmp
+
+    def distance_hr(self):
+        mapping = {'Long': 'lång',
+                   'Middle': 'medel',
+                   'Sprint': 'sprint'}
+        try:
+            tmp = mapping[self.distance]
+        except:
+            tmp = self.distance
+        return tmp
+
+    def runners(self):
+        res = self.result_set.all()
+        return res.values_list('competitor').distinct()
+
+    def results(self):
+        res = self.result_set.all().annotate(
+            null_position=Count('position')).order_by('class_name', '-null_position', 'position')
+        prev = None
+        res_dict = collections.OrderedDict()
+        for r in res:
+            if r.class_name != prev:
+                prev = r.class_name
+                res_dict[r.class_name] = [r]
+            else:
+                res_dict[r.class_name].append(r)
+        return res_dict
+
 
 class Result(models.Model):
     competitor = models.ForeignKey(Competitor)
@@ -143,7 +187,7 @@ class Result(models.Model):
     course_length = models.CharField(verbose_name="banlängd", max_length=255, blank=True, null=True)
     class_name = models.CharField(verbose_name="klassnamn", max_length=255)
     nr_of_starts = models.IntegerField(verbose_name="antal startande", blank=True, null=True)
-    position = models.CharField(verbose_name="placering", max_length=255, blank=True, null=True)
+    position = models.IntegerField(verbose_name="placering", blank=True, null=True)
     time = models.CharField(verbose_name="tid", max_length=255, blank=True, null=True)
     time_diff = models.CharField(verbose_name="tid efter segraren", max_length=255, blank=True, null=True)
     status = models.CharField(verbose_name="status", max_length=255, blank=True, null=True)
@@ -155,3 +199,14 @@ class Result(models.Model):
     def __str__(self):
         """Return string representation of object"""
         return "{event}, {name}".format(event=self.race.event, name=self.competitor)
+
+    def course_length_hr(self):
+        if self.course_length:
+            try:
+                if float(self.course_length) == 0:
+                    return None
+                return "{length} m".format(length=float(self.course_length))
+            except:
+                return self.course_length
+        else:
+            return None

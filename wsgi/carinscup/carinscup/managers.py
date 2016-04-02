@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils.safestring import mark_safe
 from eventor_toolkit import Eventor
 
 
@@ -32,3 +33,9 @@ class OrganisationManager(models.Manager):
             self.update_or_create(
                 organisation_id=organisation_id,
                 defaults={'name': name})
+
+    def html(self):
+        res = []
+        for o in self.all():
+            res.append(mark_safe("<a href='{url}'>{name}</a>".format(url=o.get_absolute_url(), name=o)))
+        return res

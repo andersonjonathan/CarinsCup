@@ -1,8 +1,8 @@
 {% extends 'master.html' %}
-{% block title %} - Tävlingar (events.number){% endblock %}
 {% load cc_tags %}
 {% block body %}
     <div class="container">
+    <h1 class="header center ksk-red-text">{{ organisation }}</h1>
         <h4>Tävlingar</h4>
         <div class="collection">
         {% for event in events %}
@@ -55,6 +55,3 @@
   </ul>
     </div>
 {% endblock %}
-
-
-

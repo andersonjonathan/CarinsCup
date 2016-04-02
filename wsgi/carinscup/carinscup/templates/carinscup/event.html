@@ -1,9 +1,71 @@
 {% extends 'master.html' %}
+{% block title %} - {{ event }}{% endblock %}
 {% block body %}
     <div class="container">
         <h4>{{ event }}</h4>
+        <ul class="collection">
+            <li class="collection-item">
+                <span>
+                    <span class="material-icons icon-size left">today</span>
+                    {{ event.start_date }}{% if event.start_date != event.end_date %} - {{ event.end_date }}{% endif %},
+                </span>{{ event.event_form_hr|capfirst }}
 
-        {{ event.start_date }}<br>
-        {{ event.runners }}<br>
+                <span class="right">
+                    {{ event.event_status_hr|capfirst }}
+                </span>
+
+                <br>
+            <span class="badge" title="Antal klubbresultat"><span class="chip">{{ event.runners.count }}</span></span>
+                {{ event }} <i>({{ event.classification_hr }})</i><br>
+                Arrangör: {{ event.organisations.html|join:", " }}
+            </li>
+        </ul>
+    <ul class="collection">
+        {% for race in event.race_set.all %}
+            <li class="collection-item">
+                {% if event.race_set.count != 1 %}
+                    <span class="badge" title="Antal klubbresultat"><span class="chip">{{ race.runners.count }}</span></span>
+                    {% if race.name %}{{ race.name }}<br>{% endif %}
+                    {% if race.date %}
+                        <span><span class="material-icons icon-size left">today</span>{{ race.date }}</span><br>
+                    {% endif %}
+                    {% if race.light_condition %}
+                        {% if race.light_condition_hr != 'dag' %}
+                            {{ race.light_condition_hr|capfirst }}<br>
+                        {% endif %}
+                    {% endif %}
+                    {% if race.distance %}
+                        Distans: {{ race.distance_hr|capfirst }}<br>
+                    {% endif %}
+                    <hr>
+                {% endif %}
+                <table width="100%">
+                <thead>
+                <tr>
+                    <td>Plac</td>
+                    <td>Namn</td>
+                    <td>Tid</td>
+                    <td>Cuppoäng</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for klass, results in race.results.items %}
+                    <tr><td colspan="4">
+                    <strong>{{ klass }}</strong>{% if results.0.course_length_hr %}, {{ results.0.course_length_hr }}{% endif %}<span class="right">{% if results.0.nr_of_starts %}Antal startande: {{ results.0.nr_of_starts }}{% endif %}</span>
+                    </td></tr>
+                    {% for result in results %}
+                        <tr class="grey {% cycle 'lighten-4' 'lighten-3' %}">
+                            <td>{% if result.position %}{{ result.position }}{% else %}-{% endif %}</td>
+                            <td><a href="{{ result.competitor.get_absolute_url }}">{{ result.competitor }}</a></td>
+                            <td>{% if result.status == "OK" %}{{ result.time }} (+{{ result.time_diff }}){% else %}{{ result.status }}{% endif %}</td>
+                            <td>{% if result.points %}{{ result.points }}{% else %}Inte uträknat{% endif %}</td>
+                    {% endfor %}
+                    <tr class="spacer"><td colspan="4"></td></tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </li>
+        {% endfor %}
+    </ul>
     </div>
 {% endblock %}
