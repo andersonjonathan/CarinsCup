@@ -17,9 +17,9 @@
             </span>
 
             <br>
-        <span class="badge" title="Antal klubbresultat"><span class="chip">{{ event.runners.count }}</span></span>
             {{ event }} <i>({{ event.classification_hr }})</i><br>
-            Arrangör: {{ event.organisations.all|join:", " }}
+            Arrangör: {{ event.organisations.all|join:", " }}<br>
+            {% if event.event_status < 9 %}Antal klubbanmälningar:{% else %}Antal klubbresultat:{% endif %} {{ event.runners.count }}
         </a>
         {% endfor %}
         </div>

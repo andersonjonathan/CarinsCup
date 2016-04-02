@@ -39,7 +39,7 @@
           <li><a href="{% url 'cc:events' %}">Tävlingar</a></li>
           <li><a id="toggle-members" href="#!"><i class="material-icons left">search</i>Medlemmar</a></li>
       </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+      <a href="#" data-activates="nav-mobile" class="button-collapse right"><i class="material-icons">menu</i></a>
     </div>
   </nav>
 <div id="members" class="row white-text grey darken-3" >
@@ -92,7 +92,11 @@
     (function($){
   $(function(){
 
-    $('.button-collapse').sideNav();
+    $('.button-collapse').sideNav({
+      menuWidth: 240, // Default is 240
+      edge: 'right', // Choose the horizontal origin
+      closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
+    });
 
   }); // end of document ready
 })(jQuery); // end of jQuery name space
@@ -105,6 +109,7 @@ $( document ).ready(function() {
 
         search.is(":visible") ? search.slideUp() : search.slideDown(function()
         {
+            $('.button-collapse').sideNav('hide');
             search.find('input').focus();
         });
 

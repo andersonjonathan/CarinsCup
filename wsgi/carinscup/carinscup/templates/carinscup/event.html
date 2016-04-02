@@ -9,22 +9,19 @@
                     <span class="material-icons icon-size left">today</span>
                     {{ event.start_date }}{% if event.start_date != event.end_date %} - {{ event.end_date }}{% endif %},
                 </span>{{ event.event_form_hr|capfirst }}
-
                 <span class="right">
                     {{ event.event_status_hr|capfirst }}
                 </span>
-
                 <br>
-            <span class="badge" title="Antal klubbresultat"><span class="chip">{{ event.runners.count }}</span></span>
                 {{ event }} <i>({{ event.classification_hr }})</i><br>
-                Arrangör: {{ event.organisations.html|join:", " }}
+                Arrangör: {{ event.organisations.html|join:", " }}<br>
+                {% if event.event_status < 9 %}Antal klubbanmälningar:{% else %}Antal klubbresultat:{% endif %} {{ event.runners.count }}
             </li>
         </ul>
     <ul class="collection">
         {% for race in event.race_set.all %}
             <li class="collection-item">
                 {% if event.race_set.count != 1 %}
-                    <span class="badge" title="Antal klubbresultat"><span class="chip">{{ race.runners.count }}</span></span>
                     {% if race.name %}{{ race.name }}<br>{% endif %}
                     {% if race.date %}
                         <span><span class="material-icons icon-size left">today</span>{{ race.date }}</span><br>
@@ -37,6 +34,8 @@
                     {% if race.distance %}
                         Distans: {{ race.distance_hr|capfirst }}<br>
                     {% endif %}
+
+                <span>{% if event.event_status < 9 %}Antal klubbanmälningar:{% else %}Antal klubbresultat:{% endif %} {{ race.runners.count }}</span><br>
                     <hr>
                 {% endif %}
                 <table width="100%">
