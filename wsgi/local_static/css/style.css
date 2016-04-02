@@ -1,0 +1,25 @@
+.ksk-red {
+  background-color: #B01B2E !important;
+}
+
+.ksk-red-text {
+  color: #B01B2E !important;
+}
+.ksk-orange {
+  background-color: #F7E64A !important;
+}
+
+.ksk-orange-text {
+  color: #F7E64A !important;
+}
+
+#members {
+    display: none;
+    margin-bottom: 0px;
+    border-top: 1px solid #111;
+    border-bottom: 1px solid #111;
+}
+
+.icon-size{
+    font-size: 1.2em
+}

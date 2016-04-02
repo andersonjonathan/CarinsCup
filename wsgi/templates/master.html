@@ -1,12 +1,119 @@
+{% load staticfiles %}
+{% load cc_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Carins cup{% block title %}{% endblock %}</title>
+    <meta name="description" content="Carins Cup är en intern tävling inom Kexholms SK">
+    <meta name="keywords" content="CarinsCup Carins Cup Kexholms SK">
+
+    <meta property="og:site_name" content="Carins Cup, Kexholms SK" />
+    <meta property="og:image" content="{% static "klubb.png" %}" />
+    <meta name="theme-color" content="#B01B2E"><!-- Very nice feature on newish android phones where the color is shown on the chrome menu. -->
+
+    <link rel="shortcut icon" type="image/png" href="{% static "icon.ico" %}"/>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{% static "css/materialize.min.css" %}"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/style.css" %}"  media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     {% block head %}{% endblock %}
 </head>
 <body>
-{% block body %}{% endblock %}
-{% block scripts %}{% endblock %}
+{% get_members_with_results as members %}
+
+<nav class="ksk-red lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="{% url "cc:index" %}" class="brand-logo">Carins Cup</a>
+      <ul class="right hide-on-med-and-down">
+          <li><a href="#">Totalställning</a></li>
+          <li><a href="{% url 'cc:events' %}">Tävlingar</a></li>
+          <li><a id="toggle-members" href="#!">Medlemmar<i class="material-icons left">search</i></a></li>
+
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="#">Totalställning</a></li>
+          <li><a href="{% url 'cc:events' %}">Tävlingar</a></li>
+          <li><a id="toggle-members" href="#!"><i class="material-icons left">search</i>Medlemmar</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+<div id="members" class="row white-text grey darken-3" >
+    <div class="container">
+        <input class="search" placeholder="Namn" type="text" onkeyup="filter_members(this)" />
+        <ul id="member_list">
+            {% for m in members %}
+                <li><span class="name" ><a href="{{ m.get_absolute_url }}">{{ m }}</a></span></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+    {% block body %}{% endblock %}
+  <footer class="page-footer ksk-red">
+    <div class="container">
+      <div class="row">
+        <div class="col l8 s12">
+          <h5 class="white-text">Carins Cup!</h5>
+          <p class="grey-text text-lighten-4">
+              Vandringspris till klubbens bäste orienterare<br>
+              Det är priset det snackas om, det är priset alla vill vinna… Priset vi talar om är det mycket prestigefyllda vandringspriset ”Carins Cup”. För vem är egentligen klubbens bäste orienterare?</p>
+        </div>
+        <div class="col l4 s12">
+          <h5 class="white-text">Länkar</h5>
+          <ul>
+            <li><a class="white-text" href="https://github.com/andersonjonathan/CarinsCup">Koden finns på GitHub</a></li>
+            <li><a class="white-text" href="http://kexholmssk.se">Kexholms SK</a></li>
+            <li><a class="white-text" href="{% url 'cc:about' %}">Om sidan</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="{% static "js/materialize.min.js" %}"></script>
+<script>
+    function filter_members(element) {
+        var value = $(element).val();
+
+        $("#member_list").find("> li").each(function() {
+            if ($(this).text().toUpperCase().search(value.toUpperCase()) > -1) {
+                $(this).show();
+            }
+            else {
+                $(this).hide();
+            }
+        });
+    }
+    (function($){
+  $(function(){
+
+    $('.button-collapse').sideNav();
+
+  }); // end of document ready
+})(jQuery); // end of jQuery name space
+
+// Toggle search
+$( document ).ready(function() {
+    $('a#toggle-members').click(function()
+    {
+        var search = $('div#members');
+
+        search.is(":visible") ? search.slideUp() : search.slideDown(function()
+        {
+            search.find('input').focus();
+        });
+
+        return false;
+    });
+
+});
+
+</script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

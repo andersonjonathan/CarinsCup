@@ -1,6 +1,9 @@
 {% extends 'master.html' %}
 {% block body %}
     <div class="container">
-    <h1 class="header center ksk-red-text">Välkommen</h1>
+        <h4>{{ event }}</h4>
+
+        {{ event.start_date }}<br>
+        {{ event.runners }}<br>
     </div>
 {% endblock %}

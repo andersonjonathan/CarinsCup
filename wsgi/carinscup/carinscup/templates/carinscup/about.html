@@ -1,0 +1,40 @@
+{% extends 'master.html' %}
+{% block body %}
+<div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center ksk-red-text">Carins Cup Sidan</h1>
+    </div>
+  </div>
+  <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h3 class="center ksk-red-text light lighten-4"><i>Ramverk</i></h3>
+              <p class="light">Sidan är byggd i <a href="https://www.python.org/">python3</a> med ramverket <a href="https://www.djangoproject.com/">Django</a>.</p>
+            <p class="light">Sidan är stylad med <a href="http://materializecss.com">Materialize</a>.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+              <h3 class="center ksk-red-text light lighten-4"><i>Hosting</i></h3>
+              <p class="light">Sidan ligger live på <a href="https://www.openshift.com/">OpenShift online</a> en Platform-as-a-Service av Red Hat</p>
+              <p class="light">Koden finns på GitHub under repot <a href="https://github.com/andersonjonathan/CarinsCup">CarinsCup</a> och är utvecklad av Jonathan Anderson.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h3 class="center ksk-red-text light lighten-4"><i>Innehåll</i></h3>
+            <p class="light">Orginal datan hämtas från <a href="http://eventor.orientering.se/">Eventor</a> via dess API. För att underlätta hanteringen av data används ett pythonpaket <a href="https://github.com/andersonjonathan/Eventor-toolkit">Eventor-toolkit</a> också utveklat av Jonathan Anderson under MIT-licens.</p><p class="light">Den hämtade datan lagras sedan i en MySQL-databas för att inte belasta Eventor och för snabbare responstider.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

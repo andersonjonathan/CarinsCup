@@ -1,9 +1,78 @@
 {% extends 'master.html' %}
 {% block body %}
-    <h1>{{ user }}</h1>
-    competitor_id: {{ user.competitor_id }}<br>
-    given_name: {{ user.given_name }}<br>
-    family_name: {{ user.family_name }}<br>
-    sex: {{ user.sex }}<br>
-    birth_date: {{ user.birth_date }}<br>
+    <div class="container">
+        <h1 class="header center ksk-red-text">{{ user }}</h1>
+
+        <div class="section">
+            <div class="row">
+                <div class="col s12 m6">
+                        <h3 class="ksk-red-text light lighten-4"><i>Info</i></h3>
+                        <p class="light">
+                            Tävlings id: {{ user.competitor_id }}<br>
+                            Förnamn: {{ user.given_name }}<br>
+                            Efternamn: {{ user.family_name }}<br>
+                            Kön: {{ user.sex }}<br>
+                            Födelsedatum: {{ user.birth_date }}<br>
+                        </p>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="row">
+                <div class="col s12 m12">
+                    <h3 class="ksk-red-text light lighten-4"><i>Results</i></h3>
+                    {% for r in user.result_set.all %}
+                        {{ r.race.event.name }}
+                        {{ r.race.event.event_form }}
+                        {{ r.race.event.event_status }}
+                        {{ r.race.event.classification }}
+                        {{ r.race.event.start_date }}{% if r.race.event.start_date != r.race.event.end_date %} -
+                            {{ r.race.event.end_date }}{% endif %}
+                        {{ r.race.event.organisations.all|join:", " }}
+
+                        {% if r.race.name %}
+                            {{ r.race.name }}
+                        {% endif %}
+                        {% if r.race.light_condition %}
+                            {{ r.race.light_condition }}
+                        {% endif %}
+                        {% if r.race.distance %}
+                            {{ r.race.distance }}
+                        {% endif %}
+                        {% if r.race.date %}
+                            {{ r.race.date }}
+                        {% endif %}
+                        {% if r.course_length %}
+                            {{ r.course_length }}
+                        {% endif %}
+
+                        {{ r.class_name }}
+
+                        {% if r.nr_of_starts %}
+                            {{ r.nr_of_starts }}
+                        {% endif %}
+                        {% if r.position %}
+                            {{ r.position }}
+                        {% endif %}
+                        {% if r.time %}
+                            {{ r.time }}
+                        {% endif %}
+                        {% if r.time_diff %}
+                            {{ r.time_diff }}
+                        {% endif %}
+                        {% if r.status %}
+                            {{ r.status }}
+                        {% endif %}
+                        {% if r.points %}
+                            {{ r.points }}
+                        {% endif %}
+                        <br>
+                        <br>
+
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

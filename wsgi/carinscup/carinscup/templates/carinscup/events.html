@@ -1,0 +1,59 @@
+{% extends 'master.html' %}
+{% load cc_tags %}
+{% block body %}
+    <div class="container">
+        <h4>Tävlingar</h4>
+        <div class="collection">
+        {% for event in events %}
+        <a class="collection-item waves-effect" href="{{ event.get_absolute_url }}">
+            <span>
+                <span class="material-icons icon-size left">today</span>
+                {{ event.start_date }}{% if event.start_date != event.end_date %} - {{ event.end_date }}{% endif %},
+            </span>{{ event.event_form_hr|capfirst }}
+
+            <span class="right">
+                {{ event.event_status_hr|capfirst }}
+            </span>
+
+            <br>
+        <span class="badge"><span class="chip">{{ event.runners.count }}</span></span>
+            {{ event }} <i>({{ event.classification_hr }})</i><br>
+            Arrangör: {{ event.organisations.all|join:", " }}
+        </a>
+        {% endfor %}
+        </div>
+    {% get_page_range events.number events.paginator.num_pages as page_range %}
+    <ul class="pagination center">
+    {% if events.has_previous %}
+    <li class="waves-effect"><a href="?page={{ events.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+    {% endif %}
+    {% if 1 not in page_range %}
+        <li class="waves-effect"><a href="?page=1">1</a></li>
+        {% if 2 not in page_range %}
+            <li class="disabled"><a href="javascript:void(0)">...</a></li>
+        {% endif %}
+    {% endif %}
+        {% for number in page_range %}
+            {% if number == events.number %}
+                <li class="active"><a href="javascript:void(0)">{{ number }}</a></li>
+            {%  else %}
+                <li class="waves-effect"><a href="?page={{ number }}">{{ number }}</a></li>
+            {% endif %}
+        {% endfor %}
+    {% if events.paginator.num_pages not in page_range %}
+        {% if events.paginator.num_pages|add:-1 not in page_range %}
+            <li class="disabled"><a href="javascript:void(0)">...</a></li>
+        {% endif %}
+        <li class="waves-effect"><a href="?page={{ events.paginator.num_pages }}">{{ events.paginator.num_pages }}</a></li>
+    {% endif %}
+    {% if events.has_next %}
+            <li class="waves-effect"><a href="?page={{ events.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+    {% endif %}
+
+
+  </ul>
+    </div>
+{% endblock %}
+
+
+

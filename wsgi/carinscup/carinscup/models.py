@@ -2,6 +2,7 @@ from django.db import models
 from .managers import CompetitorsManager, OrganisationManager
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from eventor_toolkit import Eventor
 
 
 class Competitor(models.Model):
@@ -75,9 +76,46 @@ class Event(models.Model):
     end_date = models.CharField(verbose_name="slut datum", max_length=255)
     organisations = models.ManyToManyField(Organisation)
 
+    class Meta:
+        ordering = ['-start_date']
+
     def __str__(self):
         """Return string representation of object"""
         return self.name
+
+    def get_absolute_url(self):
+        """Get url of object"""
+        return reverse('cc:event', kwargs={'pk': self.pk})
+
+    def runners(self):
+        res = Result.objects.none()
+        for r in self.race_set.all():
+            res |= r.result_set.all()
+        return res.distinct()
+
+    def event_form_hr(self):
+
+        try:
+            tmp = Eventor.EVENT_FORM_MAPPING[self.event_form]
+        except:
+            tmp = self.event_form
+        return tmp
+
+    def event_status_hr(self):
+
+        try:
+            tmp = Eventor.EVENT_STATUS_ID_MAPPING[self.event_status]
+        except:
+            tmp = self.event_status
+        return tmp
+
+    def classification_hr(self):
+        try:
+            tmp = Eventor.CLASSIFICATION_ID_MAPPING[self.classification]
+        except:
+            tmp = self.classification
+        return tmp
+
 
 
 class Race(models.Model):
@@ -90,6 +128,7 @@ class Race(models.Model):
 
     class Meta:
         unique_together = ('event', 'event_race_id')
+        ordering = ['event__start_date']
 
     def __str__(self):
         """Return string representation of object"""
@@ -109,6 +148,9 @@ class Result(models.Model):
     time_diff = models.CharField(verbose_name="tid efter segraren", max_length=255, blank=True, null=True)
     status = models.CharField(verbose_name="status", max_length=255, blank=True, null=True)
     points = models.IntegerField(verbose_name='poäng', blank=True, null=True)
+
+    class Meta:
+        ordering = ['race__event__start_date']
 
     def __str__(self):
         """Return string representation of object"""
