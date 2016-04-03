@@ -239,7 +239,7 @@ class Result(models.Model):
                 length = float(self.course_length)
             except:
                 try:
-                    length = float(re.findall("[-+]?\d+[\.]?\d*", self.course_length))
+                    length = float(re.findall("[-+]?\d+[\.]?\d*", self.course_length)[0])
                 except:
                     return None
         if not self.time_in_seconds or self.time_in_seconds == 0:
@@ -249,7 +249,7 @@ class Result(models.Model):
         except:
             return None
 
-        return "{m}:{s}".format(m=int(sp), s=round((sp - int(sp))*60))
+        return "{m}:{s:02d}".format(m=int(sp), s=round((sp - int(sp))*60))
 
     def parse_cc_points(self):
         try:
@@ -289,6 +289,8 @@ class Result(models.Model):
             if points < 50:
                 points = 50
             self.points = round(points)
+        elif self.status.upper() == "INACTIVE":
+            self.points = None
         else:
             self.points = 0
         self.save()

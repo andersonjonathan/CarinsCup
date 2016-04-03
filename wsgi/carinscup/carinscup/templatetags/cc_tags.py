@@ -1,5 +1,6 @@
 from django import template
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from carinscup.models import Competitor
 
@@ -38,3 +39,12 @@ def get_current_year():
 @register.assignment_tag
 def year_range():
     return range(2010, timezone.now().year+1, 1)
+
+@register.simple_tag
+def get_empty_cells(val):
+    tmp = 1
+    res = ""
+    while tmp <= 8-len(val):
+        res += "<td></td>"
+        tmp += 1
+    return mark_safe(res)

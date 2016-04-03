@@ -18,13 +18,14 @@
                 <td width="5%" align="center"><strong>8</strong></td>
             </tr>
             {% for key, val in cc.items %}
-                <tr>
+                <tr class="grey {% cycle 'lighten-4' 'lighten-3' %}">
                     <td>{{ forloop.counter }}</td>
                     <td><a href="{{ val.0.competitor.get_absolute_url }}">{{ val.0.competitor }}</a> </td>
                     <td>{{ sum|get_item:key }}</td>
                 {% for r in val %}
                     <td><a href="{{ r.race.event.get_absolute_url }}">{{ r.points }}</a></td>
                 {% endfor %}
+                {% get_empty_cells val %}
                 </tr>
 
             {% endfor %}
