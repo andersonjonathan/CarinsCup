@@ -13,9 +13,10 @@
                     {{ event.event_status_hr|capfirst }}
                 </span>
                 <br>
-                <a href="http://eventor.orientering.se/Events/Show/{{ event.event_id }}">{{ event }}</a> <i>({{ event.classification_hr }})</i><br>
+                {{ event }} <i>({{ event.classification_hr }})</i><br>
                 Arrangör: {{ event.organisations.html|join:", " }}<br>
-                {% if event.event_status < 9 %}Antal klubbanmälningar:{% else %}Antal klubbresultat:{% endif %} {{ event.runners.count }}
+                {% if event.event_status < 9 %}Antal klubbanmälningar:{% else %}Antal klubbresultat:{% endif %} {{ event.runners.count }}<br>
+                <a href="http://eventor.orientering.se/Events/Show/{{ event.event_id }}">Länk till eventor</a>
             </li>
         </ul>
     <ul class="collection">

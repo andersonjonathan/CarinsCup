@@ -43,6 +43,9 @@ class Command(BaseCommand):
                               'start_date': start_date,
                               'end_date': end_date,
                               })
+                if not created and event.classification != classification:
+                    event.classification = classification
+                    event.save()
                 if event_form == 'RelaySingleDay':
                     continue
                 if type(organisations) == list:
