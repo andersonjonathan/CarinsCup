@@ -207,7 +207,7 @@ class Result(models.Model):
     class Meta:
         verbose_name = "Resultat"
         verbose_name_plural = "Resulten"
-        ordering = ['race__event__start_date']
+        ordering = ['-race__event__start_date']
 
     def save(self, *args, **kwargs):
         """Override save to set created and modifed date before saving."""
