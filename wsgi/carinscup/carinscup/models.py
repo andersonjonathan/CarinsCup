@@ -1,5 +1,5 @@
 import collections
-
+import re
 import time
 from django.db import models
 from django.db.models import Count
@@ -231,6 +231,26 @@ class Result(models.Model):
         else:
             return None
 
+    def speed(self):
+        if self.course_length:
+            try:
+                if float(self.course_length) == 0:
+                    return None
+                length = float(self.course_length)
+            except:
+                try:
+                    length = float(re.findall("[-+]?\d+[\.]?\d*", self.course_length))
+                except:
+                    return None
+        if not self.time_in_seconds or self.time_in_seconds == 0:
+            return None
+        try:
+            sp = float((self.time_in_seconds * 100)/(length * 6))
+        except:
+            return None
+
+        return "{m}:{s}".format(m=int(sp), s=round((sp - int(sp))*60))
+
     def parse_cc_points(self):
         try:
             time_min, time_sec = self.time.split(':')
@@ -305,6 +325,8 @@ class Result(models.Model):
         if 'GM' in self.class_name.upper():  # GM
             return 98
         if 'DM' in self.class_name.upper():  # DM
+            return 94
+        if self.race.event.classification == 1:  # Championship, at least on district level
             return 94
         if 'M' in self.class_name.upper():  # Motion
             return 80

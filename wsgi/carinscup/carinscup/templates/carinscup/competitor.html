@@ -37,7 +37,7 @@
                     Distans: {{ r.race.distance_hr|capfirst }}<br>
                 {% endif %}
                 Klass: {{ r.class_name }}<br>
-                {% if r.course_length_hr %}Banlängd: {{ r.course_length_hr }}<br>{% endif %}
+                {% if r.course_length_hr %}Banlängd: {{ r.course_length_hr }} {% if r.speed %}({{ r.speed }} min/km){% endif %}<br>{% endif %}
                 {% if r.nr_of_starts %}Antal startande: {{ r.nr_of_starts }}<br>{% endif %}
                 <table width="100%">
                 <thead>

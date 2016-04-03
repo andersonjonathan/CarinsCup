@@ -43,6 +43,10 @@ class OrganisationManager(models.Manager):
 
 class ResultsManager(models.Manager):
     def update_cc_points(self):
+        for o in self.all():
+            o.parse_cc_points()
+
+    def update_new_cc_points(self):
         tmp = self.filter(points__isnull=True)
         tmp |= self.filter(points=0)
         for o in tmp:
