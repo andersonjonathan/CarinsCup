@@ -13,62 +13,53 @@
             Födelsedatum: {{ user.birth_date }}<br>
             </li>
         </ul>
-        <div class="section">
-            <div class="row">
-                <div class="col s12 m12">
-                    <h3 class="ksk-red-text light lighten-4"><i>Results</i></h3>
-                    {% for r in user.result_set.all %}
-                        {{ r.race.event.name }}
-                        {{ r.race.event.event_form }}
-                        {{ r.race.event.event_status }}
-                        {{ r.race.event.classification }}
-                        {{ r.race.event.start_date }}{% if r.race.event.start_date != r.race.event.end_date %} -
-                            {{ r.race.event.end_date }}{% endif %}
-                        {{ r.race.event.organisations.all|join:", " }}
+        <ul class="collection">
+        {% for r in user.result_set.all %}
+            <li class="collection-item">
+                <span>
+                    <span class="material-icons icon-size left">today</span>
+                    {% if r.race.date and r.race.event.race_set.count != 1 %}
+                        {{ r.race.date }},
+                    {% else %}
+                        {{ r.race.event.start_date }}{% if r.race.event.start_date != r.race.event.end_date %} - {{ r.race.event.end_date }}{% endif %},
+                    {% endif %}
+                </span>{{ r.race.event.event_form_hr|capfirst }}
+                <br>
+                <a href="{{ r.race.event.get_absolute_url }}">{{ r.race.event }}</a> {% if r.race.name and r.race.event.race_set.count != 1 %}{{ r.race.name }}{% endif %} <i>({{ r.race.event.classification_hr }})</i><br>
+                Arrangör: {{ r.race.event.organisations.html|join:", " }}<br>
 
-                        {% if r.race.name %}
-                            {{ r.race.name }}
-                        {% endif %}
-                        {% if r.race.light_condition %}
-                            {{ r.race.light_condition }}
-                        {% endif %}
-                        {% if r.race.distance %}
-                            {{ r.race.distance }}
-                        {% endif %}
-                        {% if r.race.date %}
-                            {{ r.race.date }}
-                        {% endif %}
-                        {% if r.course_length %}
-                            {{ r.course_length }}
-                        {% endif %}
-
-                        {{ r.class_name }}
-
-                        {% if r.nr_of_starts %}
-                            {{ r.nr_of_starts }}
-                        {% endif %}
-                        {% if r.position %}
-                            {{ r.position }}
-                        {% endif %}
-                        {% if r.time %}
-                            {{ r.time }}
-                        {% endif %}
-                        {% if r.time_diff %}
-                            {{ r.time_diff }}
-                        {% endif %}
-                        {% if r.status %}
-                            {{ r.status }}
-                        {% endif %}
-                        {% if r.points %}
-                            {{ r.points }}
-                        {% endif %}
-                        <br>
-                        <br>
-
-
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+                {% if r.race.light_condition %}
+                    {% if r.race.light_condition_hr != 'dag' %}
+                        {{ r.race.light_condition_hr|capfirst }}<br>
+                    {% endif %}
+                {% endif %}
+                {% if r.race.distance %}
+                    Distans: {{ r.race.distance_hr|capfirst }}<br>
+                {% endif %}
+                Klass: {{ r.class_name }}<br>
+                {% if r.course_length_hr %}Banlängd: {{ r.course_length_hr }}<br>{% endif %}
+                {% if r.nr_of_starts %}Antal startande: {{ r.nr_of_starts }}<br>{% endif %}
+                <table width="100%">
+                <thead>
+                <tr>
+                    <td width="10%">Plac</td>
+                    <td width="40%">Namn</td>
+                    <td width="25%">Tid</td>
+                    <td width="25%">Cuppoäng</td>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr class="grey {% cycle 'lighten-4' 'lighten-3' %}">
+                        <td>{% if r.position %}{{ r.position }}{% else %}-{% endif %}</td>
+                        <td>{{ r.competitor }}</td>
+                        <td>{% if r.status == "OK" %}{{ r.time }} (+{{ r.time_diff }}){% else %}{{ r.status }}{% endif %}</td>
+                        <td>{% if r.points %}{{ r.points }}{% else %}Inte uträknat{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
+            </li>
+            {{ r.cc_points }}
+        {% endfor %}
+        </ul>
     </div>
 {% endblock %}

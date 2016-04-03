@@ -167,3 +167,4 @@ class Command(BaseCommand):
                             'status': status,
                         }
                     )
+        Result.objects.update_cc_points()

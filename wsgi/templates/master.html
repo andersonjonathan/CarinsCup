@@ -14,7 +14,7 @@
 
     <link rel="shortcut icon" type="image/png" href="{% static "icon.ico" %}"/>
     <!--Import Google Icon Font-->
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="{% static "css/materialize.min.css" %}"  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="{% static "css/style.css" %}"  media="screen,projection"/>
@@ -24,18 +24,19 @@
 </head>
 <body>
 {% get_members_with_results as members %}
-
+{% get_current_year as year %}
 <nav class="ksk-red lighten-1" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="{% url "cc:index" %}" class="brand-logo">Carins Cup</a>
       <ul class="right hide-on-med-and-down">
-          <li><a href="#">Totalställning</a></li>
+
+          <li><a href="{% url 'cc:cc' year=year %}">Totalställning</a></li>
           <li><a href="{% url 'cc:events' %}">Tävlingar</a></li>
           <li><a id="toggle-members" href="#!">Medlemmar<i class="material-icons left">search</i></a></li>
 
       </ul>
 
       <ul id="nav-mobile" class="side-nav">
-        <li><a href="#">Totalställning</a></li>
+        <li><a href="{% url 'cc:cc' year=year %}">Totalställning</a></li>
           <li><a href="{% url 'cc:events' %}">Tävlingar</a></li>
           <li><a id="toggle-members" href="#!"><i class="material-icons left">search</i>Medlemmar</a></li>
       </ul>

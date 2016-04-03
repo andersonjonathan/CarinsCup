@@ -39,3 +39,9 @@ class OrganisationManager(models.Manager):
         for o in self.all():
             res.append(mark_safe("<a href='{url}'>{name}</a>".format(url=o.get_absolute_url(), name=o)))
         return res
+
+
+class ResultsManager(models.Manager):
+    def update_cc_points(self):
+        for o in self.filter(points__isnull=True):
+            o.parse_cc_points()

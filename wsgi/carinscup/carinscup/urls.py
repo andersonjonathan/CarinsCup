@@ -10,7 +10,8 @@ cc_patterns = [
     url(r'^about/$', view=views.about, name='about'),
     url(r'^event/$', view=views.events, name='events'),
     url(r'^event/(?P<pk>[0-9]+)/$', view=views.event, name='event'),
-    url(r'^organisation/(?P<pk>[0-9]+)/$', view=views.organisation, name='organisation')
+    url(r'^organisation/(?P<pk>[0-9]+)/$', view=views.organisation, name='organisation'),
+    url(r'^cc/(?P<year>[0-9]+)/$', view=views.cc, name='cc'),
 ]
 
 urlpatterns = [url(r'^', include(cc_patterns, namespace=app_name))]
