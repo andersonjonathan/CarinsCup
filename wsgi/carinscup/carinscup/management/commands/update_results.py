@@ -59,11 +59,11 @@ class Command(BaseCommand):
                     course_length_dict = {}
                     for cri in class_race_info:
                         try:
-                            nr_of_starts_dict[cri['EventRaceId']] = cri['@noOfStarts']
+                            nr_of_starts_dict[cri['EventRaceId']] = int(cri['@noOfStarts'])
                         except:
                             nr_of_starts_dict[cri['EventRaceId']] = None
                         try:
-                            course_length_dict[cri['EventRaceId']] = cri['CourseLength']
+                            course_length_dict[cri['EventRaceId']] = int(cri['CourseLength'])
                         except:
                             course_length_dict[cri['EventRaceId']] = None
                     tmp = m['ClassResult']['PersonResult']
@@ -99,7 +99,7 @@ class Command(BaseCommand):
                         course_length = course_length_dict[event_race_id]
                         nr_of_starts = nr_of_starts_dict[event_race_id]
                         try:
-                            position = r['RaceResult']['Result']['ResultPosition']
+                            position = int(r['RaceResult']['Result']['ResultPosition'])
                         except:
                             position = None
                         try:
@@ -110,7 +110,10 @@ class Command(BaseCommand):
                             time_diff = r['RaceResult']['Result']['TimeDiff']
                         except:
                             time_diff = None
-                        status = r['RaceResult']['Result']['CompetitorStatus']['@value']
+                        try:
+                            status = r['RaceResult']['Result']['CompetitorStatus']['@value']
+                        except:
+                            status = None
                         Result.objects.update_or_create(
                             competitor=user,
                             race=race,
@@ -138,13 +141,14 @@ class Command(BaseCommand):
                     except:
                         course_length = None
                     try:
-                        nr_of_starts = m['ClassResult']['EventClass']['ClassRaceInfo']['@noOfStarts']
+                        nr_of_starts = int(m['ClassResult']['EventClass']['ClassRaceInfo']['@noOfStarts'])
                     except:
                         nr_of_starts = None
                     try:
-                        position = m['ClassResult']['PersonResult']['Result']['ResultPosition']
+                        position = int(m['ClassResult']['PersonResult']['Result']['ResultPosition'])
                     except:
                         position = None
+
                     try:
                         time = m['ClassResult']['PersonResult']['Result']['Time']
                     except:
@@ -153,7 +157,10 @@ class Command(BaseCommand):
                         time_diff = m['ClassResult']['PersonResult']['Result']['TimeDiff']
                     except:
                         time_diff = None
-                    status = m['ClassResult']['PersonResult']['Result']['CompetitorStatus']['@value']
+                    try:
+                        status = m['ClassResult']['PersonResult']['Result']['CompetitorStatus']['@value']
+                    except:
+                        status = None
                     Result.objects.update_or_create(
                         competitor=user,
                         race=race,
