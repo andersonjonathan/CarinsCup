@@ -275,6 +275,10 @@ class Result(models.Model):
                 class_points = self.user_set_class_points
             else:
                 class_points = self.class_points
+            if class_points == 50:
+                self.points = 50
+                self.save()
+                return None
             try:
                 winner_time = self.time_in_seconds-self.time_diff_in_seconds
             except:

@@ -11,9 +11,9 @@ def index(request):
     from_date = "{y}-02-15".format(y=year)
     to_date = "{y}-11-15".format(y=year)
     race_list = Race.objects.filter(event__start_date__gte=from_date, event__start_date__lte=to_date)
-    cc = collections.OrderedDict()
+    cc = {}
     for r in race_list:
-        for c in r.result_set.all():
+        for c in r.result_set.filter(points__isnull=False):
             if c.competitor.pk not in cc:
                 cc[c.competitor.pk] = []
             cc[c.competitor.pk].append(c)
@@ -80,9 +80,9 @@ def cc(request, year):
     from_date = "{y}-02-15".format(y=year)
     to_date = "{y}-11-15".format(y=year)
     race_list = Race.objects.filter(event__start_date__gte=from_date, event__start_date__lte=to_date)
-    cc = collections.OrderedDict()
+    cc = {}
     for r in race_list:
-        for c in r.result_set.all():
+        for c in r.result_set.filter(points__isnull=False):
             if c.competitor.pk not in cc:
                 cc[c.competitor.pk] = []
             cc[c.competitor.pk].append(c)
