@@ -5,6 +5,7 @@ app_name = "cc"
 
 cc_patterns = [
     url(r'^$', view=views.index, name='index'),
+    url(r'^box/$', view=views.box, name='box'),
     url(r'^member/$', view=views.competitors, name='competitors'),
     url(r'^member/(?P<pk>[0-9]+)/$', view=views.competitor, name='competitor'),
     url(r'^about/$', view=views.about, name='about'),

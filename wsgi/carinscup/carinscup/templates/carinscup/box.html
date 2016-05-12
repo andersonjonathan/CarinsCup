@@ -1,0 +1,17 @@
+{% load cc_tags %}
+<table style="margin-left: auto; margin-right: auto; width: 100%">
+    <tr>
+        <td width='50' align='center'><strong>Plac</strong></td>
+        <td width='200'><strong>Namn</strong></td>
+        <td width='50'><strong>Poäng</strong></td>
+    </tr>
+    {% for key, val in cc.items %}
+    <tr class="grey {% cycle 'lighten-4' 'lighten-3' %}">
+        <td align='center'>{{ forloop.counter }}</td>
+        <td><a target='_new' href="{{ val.0.competitor.get_absolute_url }}">{{ val.0.competitor }}</a> </td>
+        <td>{{ sum|get_item:key }}</td>
+    {% endfor %}
+</table>
+<div style="text-align:center; margin-left: auto; margin-right: auto; width: 100%;">
+    <a target='_new' href='http://cc.kexholmssk.se/'>Till hela listan</a>
+</div>

@@ -28,6 +28,27 @@ def index(request):
     return render(request, 'carinscup/index.html', {"cc": tmp, 'sum': tmp_sum, 'choosen_year': year})
 
 
+def box(request):
+    year = timezone.now().year
+    from_date = "{y}-02-15".format(y=year)
+    to_date = "{y}-11-15".format(y=year)
+    race_list = Race.objects.filter(event__start_date__gte=from_date, event__start_date__lte=to_date)
+    cc = {}
+    for r in race_list:
+        for c in r.result_set.filter(points__isnull=False):
+            if c.competitor.pk not in cc:
+                cc[c.competitor.pk] = []
+            cc[c.competitor.pk].append(c)
+    tmp_sum = {}
+    for key, val in cc.items():
+        cc[key] = sorted(val, key=lambda x: x.points, reverse=True)
+        if len(val) > 8:
+            cc[key] = cc[key][0:8]
+        tmp_sum[key] = sum(c.points for c in cc[key])
+    tmp = collections.OrderedDict(sorted(cc.items(), key=lambda x: sum(c.points for c in x[1]), reverse=True)[0:5])
+
+    return render(request, 'carinscup/box.html', {"cc": tmp, 'sum': tmp_sum})
+
 def about(request):
     return render(request, 'carinscup/about.html')
 
