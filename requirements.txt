@@ -1,4 +1,5 @@
 Django==1.8.5
 PyMySQL
 mysqlclient
-https://github.com/andersonjonathan/Eventor-toolkit/tarball/master#egg=Eventor-toolkit-1.0.6
+https://github.com/andersonjonathan/Eventor-toolkit/tarball/master#egg=Eventor-toolkit-1.0.7
+pytz

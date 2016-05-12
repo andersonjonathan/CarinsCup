@@ -12,9 +12,10 @@ setup(
     install_requires=[
         'Django==1.8.5',
         'PyMySQL',
-        'Eventor-toolkit>=1.0.6',
+        'Eventor-toolkit>=1.0.7',
+        'pytz'
     ],
     dependency_links=[
-        'https://github.com/andersonjonathan/Eventor-toolkit/tarball/master#egg=Eventor-toolkit-1.0.6',
+        'https://github.com/andersonjonathan/Eventor-toolkit/tarball/master#egg=Eventor-toolkit-1.0.7',
     ],
 )

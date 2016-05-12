@@ -1,0 +1,10 @@
+<table style="font-size: 12px; margin-left: auto; margin-right: auto; width: 100%">
+    <tr><th colspan='2'><a href='http://eventor.orientering.se/Activities?organisationId=646' target='_blank'>Visa hela listan</a></th></tr>
+    {% for result in activities %}
+
+        <tr><th colspan='2'><a href='{{ result.url }}' target='_blank'>{{ result.name }}</a></th></tr>
+        {% if result.start_time %}<tr><td>Datum:</td><td>{{ result.start_time|date:"Y-m-d H:i" }}</td></tr>{% endif %}
+        {% if result.registration_deadline %}<tr><td>Sista anmälan:</td><td>{{ result.registration_deadline|date:"Y-m-d H:i" }}</td></tr>{% endif %}
+        <tr><td colspan='2'><hr></td></tr>
+    {% endfor %}
+</table>

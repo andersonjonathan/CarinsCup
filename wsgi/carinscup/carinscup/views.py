@@ -1,9 +1,15 @@
 import collections
+
+import datetime
+
+import pytz as pytz
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.clickjacking import xframe_options_exempt
 from .models import Competitor, Event, Race, Result, Organisation
+from eventor_toolkit import Eventor
+from django.conf import settings
 
 
 def index(request):
@@ -49,6 +55,37 @@ def box(request):
     tmp = collections.OrderedDict(sorted(cc.items(), key=lambda x: sum(c.points for c in x[1]), reverse=True)[0:5])
 
     return render(request, 'carinscup/box.html', {"cc": tmp, 'sum': tmp_sum})
+
+
+@xframe_options_exempt
+def activities(request):
+    e = Eventor(settings.API_KEY)
+    tmp = e.activities(settings.ORGANISATION_ID, from_date=timezone.now())
+    res = []
+    if type(tmp) is not list:
+        tmp = [tmp]
+    for t in tmp:
+        tmp_dict = {"name": t['Name']}
+        try:
+            tmp_dict["url"] = t['@url']
+        except KeyError:
+            pass
+        try:
+            tmp_dict["start_time"] = pytz.timezone('UTC').localize(
+                timezone.datetime.strptime(t['@startTime'], "%Y-%m-%dT%H:%M:%SZ")
+            ).astimezone(pytz.timezone('Europe/Stockholm'))
+        except KeyError:
+            pass
+        try:
+            tmp_dict["registration_deadline"] = pytz.timezone('UTC').localize(
+                timezone.datetime.strptime(t['@registrationDeadline'], "%Y-%m-%dT%H:%M:%SZ")
+            ).astimezone(pytz.timezone('Europe/Stockholm'))
+        except KeyError:
+            pass
+        res.append(tmp_dict)
+    return render(request, 'carinscup/activities.html',
+                  {"activities": res})
+
 
 def about(request):
     return render(request, 'carinscup/about.html')
