@@ -2,7 +2,7 @@ import collections
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-
+from django.views.decorators.clickjacking import xframe_options_exempt
 from .models import Competitor, Event, Race, Result, Organisation
 
 
@@ -28,6 +28,7 @@ def index(request):
     return render(request, 'carinscup/index.html', {"cc": tmp, 'sum': tmp_sum, 'choosen_year': year})
 
 
+@xframe_options_exempt
 def box(request):
     year = timezone.now().year
     from_date = "{y}-02-15".format(y=year)
