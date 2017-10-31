@@ -1,5 +1,5 @@
-Django==1.8.5
-PyMySQL
+Django>=1.11.5,<1.11.99
+dj-static
 mysqlclient
 https://github.com/andersonjonathan/Eventor-toolkit/tarball/master#egg=Eventor-toolkit-1.0.7
 pytz

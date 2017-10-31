@@ -10,42 +10,27 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
+
+from django.contrib import messages
+
 DJ_PROJECT_DIR = os.path.dirname(__file__)
 BASE_DIR = os.path.dirname(DJ_PROJECT_DIR)
 WSGI_DIR = os.path.dirname(BASE_DIR)
 REPO_DIR = os.path.dirname(WSGI_DIR)
-DATA_DIR = os.environ.get('OPENSHIFT_DATA_DIR', BASE_DIR)
+DATA_DIR = os.path.join(REPO_DIR, 'data')
+sys.path.append(os.path.join(REPO_DIR, 'libs'))
 
-ON_PASS = 'OPENSHIFT_REPO_DIR' in os.environ
+import secrets
+SECRETS = secrets.getter(os.path.join(DATA_DIR, 'secrets.json'))
+SECRET_KEY = SECRETS['secret_key']
+DEBUG = str(os.environ.get('DEBUG')) == str('True')
+
 API_KEY = str(os.environ.get('EVENTOR_API'))
 ORGANISATION_ID = 646
 
-
-import sys
-sys.path.append(os.path.join(REPO_DIR, 'libs'))
-import secrets
-SECRETS = secrets.getter(os.path.join(DATA_DIR, 'secrets.json'))
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRETS['secret_key']
-
-# SECURITY WARNING: don't run with debug turned on in production!
-if ON_PASS:
-    DEBUG = False
-else:
-    DEBUG = True
-
-from socket import gethostname
 ALLOWED_HOSTS = [
-    gethostname(), # For internal OpenShift load balancer security purposes.
-    os.environ.get('OPENSHIFT_APP_DNS'), # Dynamically map to the OpenShift gear name.
-    'kexholmssk.se',
-    'cc.kexholmssk.se'
-    #'example.com', # First DNS alias (set up in the app)
-    #'www.example.com', # Second DNS alias (set up in the app)
+    '*',
 ]
 
 
@@ -97,35 +82,16 @@ WSGI_APPLICATION = 'base_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-if ON_PASS:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ['OPENSHIFT_APP_NAME'],
-            'USER': os.environ['OPENSHIFT_MYSQL_DB_USERNAME'],
-            'PASSWORD': os.environ['OPENSHIFT_MYSQL_DB_PASSWORD'],
-            'HOST': os.environ['OPENSHIFT_MYSQL_DB_HOST'],
-            'PORT': os.environ['OPENSHIFT_MYSQL_DB_PORT']
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ['APP_NAME'],
+        'USER': os.environ['MYSQL_DB_USERNAME'],
+        'PASSWORD': os.environ['MYSQL_DB_PASSWORD'],
+        'HOST': os.environ['MYSQL_DB_HOST'],
+        'PORT': os.environ['MYSQL_DB_PORT']
     }
-else:
-    from utils.helpers import get_mysql_credentials
-
-    module_dir = os.path.dirname(__file__)  # get current directory
-    file_path = os.path.join(module_dir, 'mysql_credentials')
-
-    mysql = get_mysql_credentials(file_path)  # Local db credentials.
-
-    DATABASES = {
-        'default': {
-             'ENGINE': 'django.db.backends.mysql',
-             'NAME': 'django_carinscup',
-             'USER': mysql["user"],
-             'PASSWORD': mysql["password"],
-             'HOST': mysql["host"],
-             'PORT': mysql["port"],
-        }
-    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
