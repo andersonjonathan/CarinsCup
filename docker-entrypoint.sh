@@ -18,7 +18,7 @@ touch /srv/logs/access.log
 echo Starting nginx
 # Start Gunicorn processes
 echo Starting Gunicorn.
-exec gunicorn base_app.wsgi:application \
+exec gunicorn carinscup.base_app.wsgi:application \
     --name carinscup \
     --bind unix:carinscup.sock \
     --workers 3 \
