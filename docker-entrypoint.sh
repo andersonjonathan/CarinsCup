@@ -18,6 +18,7 @@ touch /srv/logs/access.log
 echo Starting nginx
 # Start Gunicorn processes
 echo Starting Gunicorn.
+export PYTHONPATH=$PYTHONPATH:/srv/wsgi:/srv/wsgi/carinscup
 exec gunicorn carinscup.base_app.wsgi:application \
     --name carinscup \
     --bind unix:carinscup.sock \
