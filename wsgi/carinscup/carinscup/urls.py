@@ -3,7 +3,7 @@ from . import views
 
 app_name = "cc"
 
-cc_patterns = [
+urlpatterns = [
     url(r'^$', view=views.index, name='index'),
     url(r'^box/$', view=views.box, name='box'),
     url(r'^activities/$', view=views.activities, name='activities'),
@@ -15,5 +15,3 @@ cc_patterns = [
     url(r'^organisation/(?P<pk>[0-9]+)/$', view=views.organisation, name='organisation'),
     url(r'^cc/(?P<year>[0-9]+)/$', view=views.cc, name='cc'),
 ]
-
-urlpatterns = [url(r'^', include(cc_patterns, namespace=app_name))]
